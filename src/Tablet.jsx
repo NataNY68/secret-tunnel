@@ -1,6 +1,20 @@
+import { useState } from "react";
+import { useAuth } from "./AuthContext.jsx";
+
 /** Button that attempts to use the token in context when clicked */
 export default function Tablet() {
+  const [errorMsg, setErrorMsg] = useState("");
   // TODO: call authenticate when form is submitted
+  const { authenticate } = useAuth();
+
+  const tryAuth = async () => {
+    try {
+      await authenticate();
+    } catch (error) {
+      //console.log("Error message", error);
+      setErrorMsg(error.message);
+    }
+  };
 
   return (
     <section>
@@ -16,9 +30,10 @@ export default function Tablet() {
       <p>
         It holds out a rectangular stone tablet carved with an intricate design.
       </p>
-      <form>
+      <form action={tryAuth}>
         <button>Place your palm upon the tablet.</button>
       </form>
+      <p>{errorMsg}</p>
     </section>
   );
 }
